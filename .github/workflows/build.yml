@@ -11,25 +11,26 @@ jobs:
       NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
       NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      CLIENT_ID: ${{ secrets.CLIENT_ID }}
+      TEAM_NAME: ${{ secrets.TEAM_NAME }}
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Configure AWS Credentials
-      uses: aws-actions/configure-aws-credentials@v1
-      with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: us-east-1
-    - run: |
-        node getWeeklyStreams.js > data.json
-        node heatmap.js data.json > site/heatmap.csv
-    - run: |
-        git config user.name "GitHub Actions Bot"
-        git config user.email "<>"
-        
-        git add site/heatmap.csv
-        git commit -m "Updated heatmap"
-        git push origin master
-        
-        npx netlify-cli deploy --dir=site --prod
-        
+      - uses: actions/checkout@v2
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+      - run: |
+          node getWeeklyStreams.js > data.json
+          node heatmap.js data.json > site/heatmap.csv
+      - run: |
+          git config user.name "GitHub Actions Bot"
+          git config user.email "<>"
+
+          git add site/heatmap.csv
+          git commit -m "Updated heatmap"
+          git push origin master
+
+          npx netlify-cli deploy --dir=site --prod
