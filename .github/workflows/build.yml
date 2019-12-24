@@ -24,11 +24,13 @@ jobs:
           aws-region: us-east-1
       - run: |
           yarn
-          node getWeeklyStreams.js > data.json
-          node heatmap.js data.json > site/heatmap.csv
+          node getWeeklyStreams.js > $GITHUB_WORKSPACE/data.json
+          node heatmap.js data.json > $GITHUB_WORKSPACE/site/heatmap.csv
       - run: |
           git config user.name "GitHub Actions Bot"
           git config user.email "<>"
+
+          cd $GITHUB_WORKSPACE
 
           git add site/heatmap.csv
           git commit -m "Updated heatmap"
