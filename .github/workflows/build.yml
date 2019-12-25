@@ -33,7 +33,7 @@ jobs:
           cd $GITHUB_WORKSPACE
 
           git add site/heatmap.csv
-          git commit -m "Updated heatmap"
+          git commit -m "Updated heatmap" || echo "No changes made"
           git push origin master
 
           npx netlify-cli deploy --dir=site --prod
