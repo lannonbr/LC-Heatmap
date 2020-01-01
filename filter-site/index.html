@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Live Coders Heatmap</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link rel="stylesheet" href="/style.582df764.css" />
+  </head>
+  <body>
+    <h1>Live Coders Heatmap</h1>
+    <p>
+      Stats for when members of the
+      <a href="https://livecoders.dev">Live Coders</a> Twitch team are live
+      during a given week. All times are UTC.
+    </p>
+    <label for="username">
+      <input type="text" name="username" id="username" placeholder="username" />
+    </label>
+    <button id="heatmapSubmitButton">Generate Heatmap</button>
+    <div
+      style="display:flex;justify-content:space-between;align-items:baseline;"
+    >
+      <h2 id="time_range">Timeframe:</h2>
+      <p id="max_stream_point">Max Streams at once:</p>
+    </div>
+    <div id="my_dataviz"></div>
+    <p style="text-align:center;">
+      Repo:
+      <a href="https://github.com/lannonbr/LC-Heatmap/"
+        >https://github.com/lannonbr/LC-Heatmap/</a
+      >
+    </p>
+    <script src="https://d3js.org/d3.v4.js"></script>
+    <script src="https://unpkg.com/moment@2.24.0/moment.js"></script>
+    <script src="/main.a17914bc.js"></script>
+  </body>
+</html>
