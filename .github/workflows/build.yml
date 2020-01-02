@@ -2,7 +2,7 @@ name: Build Heatmap
 
 on:
   schedule:
-    - cron: "15 * * * *"
+    - cron: "50 * * * *"
 
 jobs:
   build:
@@ -17,7 +17,7 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
 
-      - name: Create Heatmap CSV
+      - name: Poll for new data
         env:
           CLIENT_ID: ${{ secrets.CLIENT_ID }}
           TEAM_NAME: ${{ secrets.TEAM_NAME }}
