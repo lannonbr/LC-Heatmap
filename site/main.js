@@ -1,6 +1,32 @@
+const streamData = require("./data.json")
+const genHeatmapData = require("./heatmap")
+
+const streams = Object.entries(streamData).reduce((acc, curr) => {
+  acc.push(...curr[1])
+  return acc
+}, [])
+
+let heatmapData = genHeatmapData(streams)
+
+generateHeatmap(heatmapData)
+getMaxStreamPoint(heatmapData)
+
+document.getElementById("heatmapSubmitButton").addEventListener("click", () => {
+  let streamers = document.getElementById("username").value.split(",")
+
+  let filteredStreams = streams.filter(entry =>
+    streamers.includes(entry.streamer)
+  )
+
+  document.getElementById("my_dataviz").innerHTML = ""
+
+  heatmapData = genHeatmapData(filteredStreams)
+
+  generateHeatmap(heatmapData)
+  getMaxStreamPoint(heatmapData)
+})
+
 setTimeframe()
-getMaxStreamPoint()
-generateHeatmap()
 
 function setTimeframe() {
   let start = moment().startOf("week")
@@ -11,45 +37,43 @@ function setTimeframe() {
   )} - ${end.format("ll")}`
 }
 
-function getMaxStreamPoint() {
+function getMaxStreamPoint(data) {
   let max = {
     day: "",
     hour: -1,
     value: -1,
   }
 
-  d3.csv("/heatmap.csv", function(data) {
-    data.forEach(point => {
-      if (+point.value > +max.value) {
-        max = point
-      }
-    })
-
-    let time = max.day
-
-    if (max.hour === "0") {
-      time += " 12:00 AM"
-    } else if (max.hour === "12") {
-      time += " 12:00 PM"
-    } else {
-      time += " " + (+max.hour % 12)
-
-      if (+max.hour < 12) {
-        time += ":00 AM"
-      } else {
-        time += ":00 PM"
-      }
+  data.forEach(point => {
+    if (+point.value > +max.value) {
+      max = point
     }
-
-    time += " UTC"
-
-    document.getElementById(
-      "max_stream_point"
-    ).innerText = `Max Streams at once: ${max.value} at ${time}`
   })
+
+  let time = max.day
+
+  if (max.hour === "0") {
+    time += " 12:00 AM"
+  } else if (max.hour === "12") {
+    time += " 12:00 PM"
+  } else {
+    time += " " + (+max.hour % 12)
+
+    if (+max.hour < 12) {
+      time += ":00 AM"
+    } else {
+      time += ":00 PM"
+    }
+  }
+
+  time += " UTC"
+
+  document.getElementById(
+    "max_stream_point"
+  ).innerText = `Max Streams at once: ${max.value} at ${time}`
 }
 
-function generateHeatmap() {
+function generateHeatmap(data) {
   // set the dimensions and margins of the graph
   var margin = { top: 20, right: 30, bottom: 20, left: 30 },
     width = 1280 - margin.left - margin.right,
@@ -116,27 +140,25 @@ function generateHeatmap() {
   var myColor = d3
     .scaleLinear()
     .range(["white", "#69b3a2"])
-    .domain([1, 10])
+    .domain([0, Math.max(...data.map(d => d.value))])
 
   //Read the data
-  d3.csv("/heatmap.csv", function(data) {
-    svg
-      .selectAll()
-      .data(data, function(d) {
-        return d.hour + ":" + d.day
-      })
-      .enter()
-      .append("rect")
-      .attr("x", function(d) {
-        return x(d.hour)
-      })
-      .attr("y", function(d) {
-        return y(d.day)
-      })
-      .attr("width", x.bandwidth())
-      .attr("height", y.bandwidth())
-      .style("fill", function(d) {
-        return myColor(d.value)
-      })
-  })
+  svg
+    .selectAll()
+    .data(data, function(d) {
+      return d.hour + ":" + d.day
+    })
+    .enter()
+    .append("rect")
+    .attr("x", function(d) {
+      return x(d.hour)
+    })
+    .attr("y", function(d) {
+      return y(d.day)
+    })
+    .attr("width", x.bandwidth())
+    .attr("height", y.bandwidth())
+    .style("fill", function(d) {
+      return myColor(d.value)
+    })
 }

@@ -1,4 +1,4 @@
-// Script to collect any streams over the last 24 hours of time
+// Script to collect any streams over the last 7 days of time
 
 const fetch = require("node-fetch")
 const moment = require("moment")
@@ -34,8 +34,6 @@ async function run() {
     .toString()
 
   let allStreams = {}
-
-  let totalTime = 0
 
   for (let member of members) {
     let queryResp = await ddb
