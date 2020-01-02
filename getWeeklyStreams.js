@@ -56,10 +56,6 @@ async function run() {
 
     if (memberStreams.length > 0) {
       allStreams[member] = memberStreams
-
-      memberStreams.forEach(s => {
-        totalTime += s.length
-      })
     }
   }
 
