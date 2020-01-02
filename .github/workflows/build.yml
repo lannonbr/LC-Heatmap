@@ -43,7 +43,4 @@ jobs:
           cd site
 
           npx parcel-bundler build index.html --no-source-maps
-
-          cd ../
-
           npx netlify-cli deploy --dir=dist --prod
