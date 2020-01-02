@@ -2,7 +2,7 @@ name: Build Heatmap
 
 on:
   schedule:
-    - cron: "50 * * * *"
+    - cron: "55 * * * *"
 
 jobs:
   build:
