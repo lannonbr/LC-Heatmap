@@ -19,6 +19,7 @@ document.getElementById("heatmapSubmitButton").addEventListener("click", () => {
   )
 
   document.getElementById("my_dataviz").innerHTML = ""
+  ;[...document.getElementsByClassName("tooltip")].forEach(d => d.remove())
 
   heatmapData = genHeatmapData(filteredStreams)
 
@@ -142,6 +143,12 @@ function generateHeatmap(data) {
     .range(["white", "#69b3a2"])
     .domain([0, Math.max(...data.map(d => d.value))])
 
+  var div = d3
+    .select("body")
+    .append("div")
+    .attr("class", "tooltip")
+    .style("opacity", 0)
+
   //Read the data
   svg
     .selectAll()
@@ -160,5 +167,19 @@ function generateHeatmap(data) {
     .attr("height", y.bandwidth())
     .style("fill", function(d) {
       return myColor(d.value)
+    })
+    .on("mouseover", function(d) {
+      if (d.streamers.length > 0) {
+        div.transition(250).style("opacity", 1)
+        let html = `<h2>${d.streamers.length} streamers on ${d.day} @ ${d.hour}:00 UTC</h2><ul>`
+        d.streamers.forEach(s => {
+          html += `<li>${s}</li>`
+        })
+        html += "</ul>"
+        div.html(html)
+      }
+    })
+    .on("mouseout", function(d) {
+      div.transition(250).style("opacity", 0)
     })
 }

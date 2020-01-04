@@ -31,6 +31,8 @@ module.exports = function(data) {
 
   let endOfWeek = subMinutes(startOfWeek(addWeeks(new Date(), 1)), 5)
 
+  let streamers = {}
+
   while (differenceInSeconds(endOfWeek, currTimePointer) > 0) {
     const currUnix = getUnixTime(currTimePointer)
     const currHour = getHours(currTimePointer)
@@ -52,6 +54,7 @@ module.exports = function(data) {
 
     if (streamsInHour) {
       timeGrid[currDay][currHour] += streamsInHour.length
+      streamers[`${currDay}-${currHour}`] = streamsInHour.map(s => s.streamer)
     }
 
     // add an hour
@@ -68,6 +71,7 @@ module.exports = function(data) {
         day: days[i],
         hour: j,
         value: val,
+        streamers: streamers[`${i}-${j}`],
       })
     })
   })
