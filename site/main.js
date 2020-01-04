@@ -70,8 +70,6 @@ function getMaxStreamPoint(data) {
     }
   }
 
-  time += " UTC"
-
   document.getElementById(
     "max_stream_point"
   ).innerText = `Max Streams at once: ${max.value} at ${time}`
@@ -174,7 +172,7 @@ function generateHeatmap(data) {
     .on("mouseover", function(d) {
       if (d.streamers.length > 0) {
         div.transition(250).style("opacity", 1)
-        let html = `<h2>${d.streamers.length} streamers on ${d.day} @ ${d.hour}:00 UTC</h2><ul>`
+        let html = `<h2>${d.streamers.length} streamers on ${d.day} @ ${d.hour}:00</h2><ul>`
         d.streamers.forEach(s => {
           html += `<li>${s}</li>`
         })
