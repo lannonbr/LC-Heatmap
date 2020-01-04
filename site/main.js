@@ -12,10 +12,13 @@ generateHeatmap(heatmapData)
 getMaxStreamPoint(heatmapData)
 
 document.getElementById("heatmapSubmitButton").addEventListener("click", () => {
-  let streamers = document.getElementById("username").value.split(",")
+  let streamers = document
+    .getElementById("username")
+    .value.split(",")
+    .map(s => s.toLowerCase())
 
   let filteredStreams = streams.filter(entry =>
-    streamers.includes(entry.streamer)
+    streamers.includes(entry.streamer.toLowerCase())
   )
 
   document.getElementById("my_dataviz").innerHTML = ""
