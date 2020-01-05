@@ -1,14 +1,16 @@
-const parse = require("date-fns/parse")
-const startOfWeek = require("date-fns/startOfWeek")
-const differenceInSeconds = require("date-fns/differenceInSeconds")
-const addHours = require("date-fns/addHours")
-const addWeeks = require("date-fns/addWeeks")
-const subMinutes = require("date-fns/subMinutes")
-const startOfHour = require("date-fns/startOfHour")
-const getUnixTime = require("date-fns/getUnixTime")
-const getHours = require("date-fns/getHours")
-const getDay = require("date-fns/getDay")
-const isEqual = require("date-fns/isEqual")
+const {
+  parse,
+  startOfWeek,
+  differenceInSeconds,
+  addHours,
+  addWeeks,
+  subMinutes,
+  startOfHour,
+  getUnixTime,
+  getHours,
+  getDay,
+  isEqual,
+} = require("date-fns")
 
 module.exports = function(data) {
   const streams = data
