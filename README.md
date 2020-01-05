@@ -12,8 +12,6 @@ The data for this project is sourced from a DynamoDB table on an hourly basis an
 - D3 for the Heatmap vizualization.
 - Parcel for bundling up the JS for production use.
 
-STuff
-
 ## Setup
 
 To get started with tinkering with the site locally, clone the repo down, install the dependencies, and spin up the dev server.
