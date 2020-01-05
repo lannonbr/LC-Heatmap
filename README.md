@@ -1,5 +1,7 @@
 # LiveCoders Heatmap
 
+![Build Heatmap Workflow Status](https://github.com/lannonbr/LC-Heatmap/workflows/Build%20Heatmap/badge.svg)
+
 ![Screenshot of Heatmap Webpage](./HeatmapScreenshot.png)
 
 A Site showcasing a heatmap weekly statistics of when Streamers of the [LiveCoders](https://livecoders.dev) team are live.
