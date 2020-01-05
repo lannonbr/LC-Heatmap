@@ -40,7 +40,5 @@ jobs:
           git commit -m "Updated heatmap dataset" || echo "No changes made"
           git push origin master
 
-          cd site
-
-          npx parcel-bundler build index.html --no-source-maps
+          yarn build
           npx netlify-cli deploy --dir=dist --prod

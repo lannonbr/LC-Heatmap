@@ -49,7 +49,7 @@ function getMaxStreamPoint(data) {
   }
 
   data.forEach(point => {
-    if (+point.value > +max.value) {
+    if (+point.value >= +max.value) {
       max = point
     }
   })
@@ -72,7 +72,7 @@ function getMaxStreamPoint(data) {
 
   document.getElementById(
     "max_stream_point"
-  ).innerText = `Max Streams at once: ${max.value} at ${time}`
+  ).innerText = `Latest peak of max streams at once: ${max.value} at ${time}`
 }
 
 function generateHeatmap(data) {
