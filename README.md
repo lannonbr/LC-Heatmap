@@ -1,6 +1,7 @@
 # LiveCoders Heatmap
 
 ![Build Heatmap Workflow Status](https://github.com/lannonbr/LC-Heatmap/workflows/Build%20Heatmap/badge.svg)
+![Deploy Site Workflow Status](https://github.com/lannonbr/LC-Heatmap/workflows/Deploy%20Site/badge.svg)
 
 ![Screenshot of Heatmap Webpage](./HeatmapScreenshot.png)
 
