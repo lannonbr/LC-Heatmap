@@ -1,3 +1,5 @@
+const { parse, startOfWeek, differenceInSeconds } = require("date-fns")
+
 const streamData = require("./data.json")
 const genHeatmapData = require("./heatmap")
 
@@ -10,10 +12,13 @@ let heatmapData = genHeatmapData(streams)
 
 generateHeatmap(heatmapData)
 getMaxStreamPoint(heatmapData)
+calculateStats(streams)
 
 document
   .getElementById("heatmapSubmitButton")
   .addEventListener("click", filterHeatmap)
+
+document.getElementById("username").value = ""
 
 document
   .getElementById("username")
@@ -40,6 +45,19 @@ function filterHeatmap() {
 
   generateHeatmap(heatmapData)
   getMaxStreamPoint(heatmapData)
+
+  // Ex: Tue, Dec 24, 2019 12:00 PM -0500
+  let timeFmt = "EEE, LLL d, yyyy h:mm bbb xx"
+
+  calculateStats(
+    selectedStreams.filter(
+      stream =>
+        differenceInSeconds(
+          parse(stream.endTime, timeFmt, new Date()),
+          startOfWeek(new Date())
+        ) > 0
+    )
+  )
 }
 
 function setTimeframe() {
@@ -157,7 +175,7 @@ function generateHeatmap(data) {
   var div = d3
     .select("body")
     .append("div")
-    .attr("class", "tooltip")
+    .attr("class", "card tooltip")
     .style("opacity", 0)
 
   //Read the data
@@ -193,4 +211,24 @@ function generateHeatmap(data) {
     .on("mouseout", function(d) {
       div.transition(250).style("opacity", 0)
     })
+}
+
+function calculateStats(streams) {
+  let totalSeconds = streams.reduce((acc, curr) => acc + curr.length, 0)
+  let totalMinutes = Math.floor(totalSeconds / 60)
+  let totalHours = Math.floor(totalMinutes / 60)
+  let totalDays = Math.floor(totalHours / 24)
+
+  let amtStreamers = [...new Set(streams.map(stream => stream.streamer))].length
+
+  document.getElementById("stats").innerHTML = `
+    <h2 style="text-align: center">Statistics</h2>
+    <ul class="flex">
+      <li>${amtStreamers}<p>Streamers live this week</p></li>
+      <li>${totalDays}<p>Total Days</p></li>
+      <li>${totalHours.toLocaleString()}<p>Total Hours</p></li>
+      <li>${totalMinutes.toLocaleString()}<p>Total Minutes</p></li>
+      <li>${totalSeconds.toLocaleString()}<p>Total Seconds</p></li>
+    </ul>
+  `
 }
