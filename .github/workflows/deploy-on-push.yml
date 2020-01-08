@@ -1,4 +1,4 @@
-name: Build Heatmap
+name: Deploy Site
 
 on:
   push:
