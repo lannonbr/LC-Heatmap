@@ -3,22 +3,33 @@ const { parse, startOfWeek, differenceInSeconds } = require("date-fns")
 const streamData = require("./data.json")
 const genHeatmapData = require("./heatmap")
 
-const streams = Object.entries(streamData).reduce((acc, curr) => {
-  acc.push(...curr[1])
-  return acc
-}, [])
+let timeFmt = "EEE, LLL d, yyyy h:mm bbb xx"
+
+const streams = Object.entries(streamData)
+  .reduce((acc, curr) => {
+    acc.push(...curr[1])
+    return acc
+  }, [])
+  .filter(
+    stream =>
+      differenceInSeconds(
+        parse(stream.endTime, timeFmt, new Date()),
+        startOfWeek(new Date())
+      ) > 0
+  )
 
 let heatmapData = genHeatmapData(streams)
 
 generateHeatmap(heatmapData)
 getMaxStreamPoint(heatmapData)
-calculateStats(streams)
 
 document
   .getElementById("heatmapSubmitButton")
   .addEventListener("click", filterHeatmap)
 
 document.getElementById("username").value = ""
+
+calculateStats(streams)
 
 document
   .getElementById("username")
@@ -46,18 +57,7 @@ function filterHeatmap() {
   generateHeatmap(heatmapData)
   getMaxStreamPoint(heatmapData)
 
-  // Ex: Tue, Dec 24, 2019 12:00 PM -0500
-  let timeFmt = "EEE, LLL d, yyyy h:mm bbb xx"
-
-  calculateStats(
-    selectedStreams.filter(
-      stream =>
-        differenceInSeconds(
-          parse(stream.endTime, timeFmt, new Date()),
-          startOfWeek(new Date())
-        ) > 0
-    )
-  )
+  calculateStats(selectedStreams)
 }
 
 function setTimeframe() {
