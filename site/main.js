@@ -11,26 +11,36 @@ let heatmapData = genHeatmapData(streams)
 generateHeatmap(heatmapData)
 getMaxStreamPoint(heatmapData)
 
-document.getElementById("heatmapSubmitButton").addEventListener("click", () => {
-  let streamers = document
-    .getElementById("username")
-    .value.split(",")
-    .map(s => s.toLowerCase())
+document
+  .getElementById("heatmapSubmitButton")
+  .addEventListener("click", filterHeatmap)
 
-  let filteredStreams = streams.filter(entry =>
-    streamers.includes(entry.streamer.toLowerCase())
-  )
+document
+  .getElementById("username")
+  .addEventListener("keydown", e => e.key === "Enter" && filterHeatmap())
+
+setTimeframe()
+
+function filterHeatmap() {
+  let streamers = document.getElementById("username").value
+
+  let streamersArr = streamers.split(",").map(s => s.toLowerCase())
+
+  let selectedStreams =
+    streamers !== ""
+      ? streams.filter(entry =>
+          streamersArr.includes(entry.streamer.toLowerCase())
+        )
+      : streams
 
   document.getElementById("my_dataviz").innerHTML = ""
   ;[...document.getElementsByClassName("tooltip")].forEach(d => d.remove())
 
-  heatmapData = genHeatmapData(filteredStreams)
+  heatmapData = genHeatmapData(selectedStreams)
 
   generateHeatmap(heatmapData)
   getMaxStreamPoint(heatmapData)
-})
-
-setTimeframe()
+}
 
 function setTimeframe() {
   let start = moment().startOf("week")
