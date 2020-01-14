@@ -179,12 +179,16 @@ function generateHeatmap(data) {
     .style("opacity", 0)
 
   //Read the data
-  svg
+  let tiles = svg
     .selectAll()
     .data(data, function(d) {
       return d.hour + ":" + d.day
     })
     .enter()
+    .append("g")
+
+  // Add background
+  tiles
     .append("rect")
     .attr("x", function(d) {
       return x(d.hour)
@@ -210,6 +214,22 @@ function generateHeatmap(data) {
     })
     .on("mouseout", function(d) {
       div.transition(250).style("opacity", 0)
+    })
+
+  // Add number on tile if streamers > 0
+  tiles
+    .append("text")
+    .text(function(d) {
+      return d.streamers.length
+    })
+    .attr("x", function(d) {
+      return x(d.hour) + 22
+    })
+    .attr("y", function(d) {
+      return y(d.day) + 34
+    })
+    .style("opacity", function(d) {
+      return d.streamers.length > 0 ? 1 : 0
     })
 }
 
