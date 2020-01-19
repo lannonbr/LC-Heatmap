@@ -1,10 +1,12 @@
-const { parse, startOfWeek, differenceInSeconds } = require("date-fns")
+const { parse, startOfWeek, differenceInSeconds, format } = require("date-fns")
 
 const streamData = require("./data.json")
 const genHeatmapData = require("./heatmap")
 const logos = require("./logos.json")
 
 let timeFmt = "EEE, LLL d, yyyy h:mm bbb xx"
+
+let sidebar
 
 const streams = Object.entries(streamData)
   .reduce((acc, curr) => {
@@ -51,7 +53,7 @@ function filterHeatmap() {
       : streams
 
   document.getElementById("my_dataviz").innerHTML = ""
-  ;[...document.getElementsByClassName("tooltip")].forEach(d => d.remove())
+  document.getElementsByClassName("tooltip")[0].remove()
 
   heatmapData = genHeatmapData(selectedStreams)
 
@@ -173,7 +175,7 @@ function generateHeatmap(data) {
     .range(["white", "#69b3a2"])
     .domain([0, Math.max(...data.map(d => d.value))])
 
-  var div = d3
+  sidebar = d3
     .select("body")
     .append("div")
     .attr("class", "card tooltip")
@@ -202,21 +204,28 @@ function generateHeatmap(data) {
     .style("fill", function(d) {
       return myColor(d.value)
     })
-    .on("mouseover", function(d) {
+    .on("click", function(d) {
       if (d.streamers.length > 0) {
-        div.transition(250).style("opacity", 1)
-        let html = `<h2>${d.streamers.length} streamers on ${d.day} @ ${d.hour}:00</h2><ul>`
+        sidebar.transition(250).style("opacity", 1)
+        let html = `<button id="sidebarCloseButton">X</button><h2>${d.streamers.length} streamers on ${d.day} @ ${d.hour}:00</h2><ul>`
         d.streamers.forEach(s => {
           html += `<li><img src="${
-            logos.filter(l => l.name === s)[0].logo
-          }"/>${s}</li>`
+            logos.filter(l => l.name === s.streamer)[0].logo
+          }"/>${s.streamer}<br/>${format(
+            parse(s.startTime, timeFmt, new Date()),
+            "eee, h:mm aaaa"
+          )} - ${format(
+            parse(s.endTime, timeFmt, new Date()),
+            "eee, h:mm aaaa"
+          )}</li>`
         })
         html += "</ul>"
-        div.html(html)
+        sidebar.html(html)
+        document.body.className = "sidebarOpen"
+        document.getElementById("sidebarCloseButton").onclick = () => {
+          closeSidebar()
+        }
       }
-    })
-    .on("mouseout", function(d) {
-      div.transition(250).style("opacity", 0)
     })
 
   // Add number on tile if streamers > 0
@@ -234,6 +243,11 @@ function generateHeatmap(data) {
     .style("opacity", function(d) {
       return d.streamers.length > 0 ? 1 : 0
     })
+}
+
+function closeSidebar() {
+  sidebar.transition(250).style("opacity", 0)
+  document.body.className = ""
 }
 
 function calculateStats(streams) {

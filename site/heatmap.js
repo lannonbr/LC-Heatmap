@@ -54,7 +54,7 @@ module.exports = function(data) {
 
     if (streamsInHour) {
       timeGrid[currDay][currHour] += streamsInHour.length
-      streamers[`${currDay}-${currHour}`] = streamsInHour.map(s => s.streamer)
+      streamers[`${currDay}-${currHour}`] = streamsInHour
     }
 
     // add an hour

@@ -5,6 +5,11 @@ body {
   margin-inline-end: auto;
   color: hsl(209, 39%, 23%);
   background-color: hsl(212, 33%, 89%);
+  transition: padding-right 300ms ease-in-out;
+}
+
+body.sidebarOpen {
+  padding-right: 350px;
 }
 
 #my_dataviz {
@@ -35,6 +40,16 @@ body {
 
 #stats ul.flex li p {
   font-size: 1rem;
+}
+
+.tooltip {
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 100%;
+  margin-block-start: 0;
+  margin-block-end: 0;
+  width: 350px;
 }
 
 .tooltip ul {
