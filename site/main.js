@@ -1,4 +1,10 @@
-const { parse, startOfWeek, differenceInSeconds, format } = require("date-fns")
+const {
+  parse,
+  startOfWeek,
+  differenceInSeconds,
+  format,
+  getDay,
+} = require("date-fns")
 
 const streamData = require("./data.json")
 const genHeatmapData = require("./heatmap")
@@ -211,13 +217,7 @@ function generateHeatmap(data) {
         d.streamers.forEach(s => {
           html += `<li><img src="${
             logos.filter(l => l.name === s.streamer)[0].logo
-          }"/>${s.streamer}<br/>${format(
-            parse(s.startTime, timeFmt, new Date()),
-            "eee, h:mm aaaa"
-          )} - ${format(
-            parse(s.endTime, timeFmt, new Date()),
-            "eee, h:mm aaaa"
-          )}</li>`
+          }"/>${s.streamer}<br/>${formatStreamTime(s)}</li>`
         })
         html += "</ul>"
         sidebar.html(html)
@@ -248,6 +248,22 @@ function generateHeatmap(data) {
 function closeSidebar() {
   sidebar.transition(250).style("opacity", 0)
   document.body.className = ""
+}
+
+function formatStreamTime(stream) {
+  const parsedStart = parse(stream.startTime, timeFmt, new Date())
+  const parsedEnd = parse(stream.endTime, timeFmt, new Date())
+  const formattedStart = format(parsedStart, "eee, h:mm aaaa")
+
+  let endFormat = "h:mm aaaa"
+
+  if (getDay(parsedStart) !== getDay(parsedEnd)) {
+    endFormat = "eee, " + endFormat
+  }
+
+  const formattedEnd = format(parsedEnd, endFormat)
+
+  return `${formattedStart} - ${formattedEnd}`
 }
 
 function calculateStats(streams) {
