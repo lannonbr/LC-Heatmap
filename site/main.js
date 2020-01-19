@@ -2,6 +2,7 @@ const { parse, startOfWeek, differenceInSeconds } = require("date-fns")
 
 const streamData = require("./data.json")
 const genHeatmapData = require("./heatmap")
+const logos = require("./logos.json")
 
 let timeFmt = "EEE, LLL d, yyyy h:mm bbb xx"
 
@@ -206,7 +207,9 @@ function generateHeatmap(data) {
         div.transition(250).style("opacity", 1)
         let html = `<h2>${d.streamers.length} streamers on ${d.day} @ ${d.hour}:00</h2><ul>`
         d.streamers.forEach(s => {
-          html += `<li>${s}</li>`
+          html += `<li><img src="${
+            logos.filter(l => l.name === s)[0].logo
+          }"/>${s}</li>`
         })
         html += "</ul>"
         div.html(html)

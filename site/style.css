@@ -36,3 +36,23 @@ body {
 #stats ul.flex li p {
   font-size: 1rem;
 }
+
+.tooltip ul {
+  padding-left: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+
+.tooltip li {
+  list-style-type: none;
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.tooltip img {
+  width: 30px;
+  height: 30px;
+  margin-inline-end: 10px;
+  border-radius: 30px;
+}
