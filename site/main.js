@@ -205,6 +205,9 @@ function generateHeatmap(data) {
     .attr("y", function(d) {
       return y(d.day)
     })
+    .attr("class", function(d) {
+      return d.streamers.length > 0 ? "present" : ""
+    })
     .attr("width", x.bandwidth())
     .attr("height", y.bandwidth())
     .style("fill", function(d) {

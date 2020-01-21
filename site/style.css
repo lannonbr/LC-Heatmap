@@ -17,6 +17,10 @@ body.sidebarOpen {
   height: 450px;
 }
 
+#my_dataviz rect.present {
+  cursor: pointer;
+}
+
 .card {
   margin-block-start: 10px;
   margin-block-end: 10px;
