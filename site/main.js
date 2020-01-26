@@ -1,20 +1,23 @@
-const {
+import {
   parse,
   startOfWeek,
+  endOfWeek,
   differenceInSeconds,
   format,
   getDay,
-} = require("date-fns")
+  getWeek,
+  addWeeks,
+} from "date-fns"
 
-const streamData = require("./data.json")
-const genHeatmapData = require("./heatmap")
-const logos = require("./logos.json")
+import streamData from "./data.json"
+import genHeatmapData from "./heatmap"
+import logos from "./logos.json"
 
 let timeFmt = "EEE, LLL d, yyyy h:mm bbb xx"
 
 let sidebar
 
-const streams = Object.entries(streamData)
+const initStreams = Object.entries(streamData)
   .reduce((acc, curr) => {
     acc.push(...curr[1])
     return acc
@@ -27,10 +30,37 @@ const streams = Object.entries(streamData)
       ) > 0
   )
 
-let heatmapData = genHeatmapData(streams)
+let currentWeek = getWeek(new Date())
 
-generateHeatmap(heatmapData)
-getMaxStreamPoint(heatmapData)
+let state = {
+  streams: initStreams,
+  week: currentWeek,
+  [`20w${currentWeek.toString().padStart(2, "0")}`]: initStreams,
+}
+
+// Disable going to next week by default
+document.getElementById("nextWeek").setAttribute("disabled", true)
+document.getElementById("currWeek").setAttribute("disabled", true)
+
+document.getElementById("currWeek").onclick = () => {
+  state.week = currentWeek
+  state.streams = state[`20w${currentWeek.toString().padStart(2, "0")}`]
+  document.getElementById("nextWeek").setAttribute("disabled", true)
+  document.getElementById("currWeek").setAttribute("disabled", true)
+  render()
+}
+
+document.getElementById("prevWeek").onclick = () => {
+  state.week--
+  findData()
+}
+
+document.getElementById("nextWeek").onclick = () => {
+  state.week++
+  findData()
+}
+
+render()
 
 document
   .getElementById("heatmapSubmitButton")
@@ -38,13 +68,62 @@ document
 
 document.getElementById("username").value = ""
 
-calculateStats(streams)
-
 document
   .getElementById("username")
   .addEventListener("keydown", e => e.key === "Enter" && filterHeatmap())
 
-setTimeframe()
+function findData() {
+  if (state.week === currentWeek) {
+    document.getElementById("nextWeek").setAttribute("disabled", true)
+    document.getElementById("currWeek").setAttribute("disabled", true)
+  } else if (state.week === 1) {
+    document.getElementById("prevWeek").setAttribute("disabled", true)
+  } else {
+    document.getElementById("nextWeek").removeAttribute("disabled")
+    document.getElementById("currWeek").removeAttribute("disabled")
+    document.getElementById("prevWeek").removeAttribute("disabled")
+  }
+
+  let ident = `20w${state.week.toString().padStart(2, "0")}`
+
+  // week cached in state
+  if (state[ident]) {
+    state.streams = state[ident]
+    render()
+  } else {
+    import(`./${ident}.js`)
+      .then(dataset => {
+        let streams = Object.entries(dataset.default).reduce((acc, curr) => {
+          acc.push(...curr[1])
+          return acc
+        }, [])
+
+        state.streams = streams
+        state.ident = streams
+        console.log(state.streams)
+        render()
+      })
+      .catch(err => {
+        console.log(err)
+        console.log("That week doesn't exist")
+      })
+  }
+}
+
+function render() {
+  document.getElementById("my_dataviz").innerHTML = ""
+  if (document.getElementsByClassName("tooltip").length > 0) {
+    document.getElementsByClassName("tooltip")[0].remove()
+  }
+
+  let heatmapData = genHeatmapData(state.streams, state.week)
+
+  generateHeatmap(heatmapData)
+  getMaxStreamPoint(heatmapData)
+
+  calculateStats(state.streams)
+  setTimeframe(state.week)
+}
 
 function filterHeatmap() {
   let streamers = document.getElementById("username").value
@@ -53,15 +132,15 @@ function filterHeatmap() {
 
   let selectedStreams =
     streamers !== ""
-      ? streams.filter(entry =>
+      ? state.streams.filter(entry =>
           streamersArr.includes(entry.streamer.toLowerCase())
         )
-      : streams
+      : state.streams
 
   document.getElementById("my_dataviz").innerHTML = ""
   document.getElementsByClassName("tooltip")[0].remove()
 
-  heatmapData = genHeatmapData(selectedStreams)
+  let heatmapData = genHeatmapData(selectedStreams)
 
   generateHeatmap(heatmapData)
   getMaxStreamPoint(heatmapData)
@@ -69,13 +148,23 @@ function filterHeatmap() {
   calculateStats(selectedStreams)
 }
 
-function setTimeframe() {
-  let start = moment().startOf("week")
-  let end = moment().endOf("week")
+function setTimeframe(week) {
+  let time = parse(`2020-01-01`, "yyyy-MM-dd", new Date())
 
-  document.getElementById("time_range").innerText = `Timeframe: ${start.format(
-    "ll"
-  )} - ${end.format("ll")}`
+  while (getWeek(time) !== week) {
+    time = addWeeks(time, 1)
+  }
+
+  let start = startOfWeek(time)
+  let end = endOfWeek(time)
+
+  // let start = moment().startOf("week")
+  // let end = moment().endOf("week")
+
+  document.getElementById("time_range").innerText = `Timeframe: ${format(
+    start,
+    "LLL d, yyyy"
+  )} - ${format(end, "LLL d, yyyy")}`
 }
 
 function getMaxStreamPoint(data) {
