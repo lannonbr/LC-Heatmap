@@ -1,4 +1,4 @@
-const {
+import {
   parse,
   startOfWeek,
   differenceInSeconds,
@@ -11,9 +11,9 @@ const {
   getDay,
   isEqual,
   getWeek,
-} = require("date-fns")
+} from "date-fns"
 
-module.exports = function(data, week) {
+export default function(data, week) {
   const streams = data
 
   let timeGrid = []

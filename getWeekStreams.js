@@ -12,7 +12,7 @@ require("dotenv").config()
 const twitchClientID = process.env.CLIENT_ID
 const team = process.env.TEAM_NAME
 
-const week = 3
+const week = 4
 
 async function run() {
   let teamURL = `https://api.twitch.tv/kraken/teams/${team}`
