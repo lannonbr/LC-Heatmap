@@ -1,4 +1,4 @@
-// Script to collect any streams over the last 7 days of time
+// Script to collect a historical week of streams
 
 const fetch = require("node-fetch")
 const dateFns = require("date-fns")

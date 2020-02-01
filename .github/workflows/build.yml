@@ -23,7 +23,7 @@ jobs:
           TEAM_NAME: ${{ secrets.TEAM_NAME }}
         run: |
           yarn
-          node getWeeklyStreams.js > ./site/data.json
+          node getCurrWeekStreams.js > ./site/js/data/data.json
 
       - name: Commit New Data & Deploy Site
         env:
@@ -41,4 +41,5 @@ jobs:
           git push origin master
 
           yarn build
+          cp -r site/weeks/ dist
           npx netlify-cli deploy --dir=dist --prod
