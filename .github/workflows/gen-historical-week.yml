@@ -1,13 +1,14 @@
-# name: Build Heatmap
+name: Gen Historical Week
 
-# on:
-#   schedule:
-#     - cron: "0 4 * * Sun"
+on:
+  schedule:
+    - cron: "0 4 * * Sun"
 
-# jobs:
-#   build:
-#     runs-on: ubuntu-latest
-#     steps:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "hey"
 #       - uses: actions/checkout@v2
 
 #       - name: Configure AWS Credentials
