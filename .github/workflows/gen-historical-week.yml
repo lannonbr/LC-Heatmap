@@ -36,7 +36,7 @@ jobs:
 
           cd $GITHUB_WORKSPACE
 
-          git add site/data.json
+          git add site/weeks/*
           git commit -m "Add historical week" || echo "No changes made"
           git push origin master
 
