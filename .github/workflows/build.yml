@@ -36,6 +36,7 @@ jobs:
 
           cd $GITHUB_WORKSPACE
 
+          git pull origin master
           git add site/js/data/data.json
           git commit -m "Updated heatmap dataset" || echo "No changes made"
           git push origin master
