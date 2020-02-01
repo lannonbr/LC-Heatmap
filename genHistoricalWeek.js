@@ -2,6 +2,7 @@
 
 const fetch = require("node-fetch")
 const dateFns = require("date-fns")
+const fs = require("fs")
 
 const AWS = require("aws-sdk")
 AWS.config.update({ region: "us-east-1" })
@@ -12,7 +13,7 @@ require("dotenv").config()
 const twitchClientID = process.env.CLIENT_ID
 const team = process.env.TEAM_NAME
 
-const week = 4
+const week = dateFns.getWeek(new Date()) - 1
 
 async function run() {
   let teamURL = `https://api.twitch.tv/kraken/teams/${team}`
@@ -65,7 +66,12 @@ async function run() {
     }
   }
 
-  console.log(JSON.stringify(allStreams))
+  let fileName = `20w${week.toString().padStart(2, "0")}.js`
+
+  fs.writeFileSync(
+    `${__dirname}/site/weeks/${fileName}`,
+    `export default ${JSON.stringify(allStreams)}`
+  )
 }
 
 run()
