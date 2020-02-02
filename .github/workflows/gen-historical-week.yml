@@ -2,7 +2,7 @@ name: Gen Historical Week
 
 on:
   schedule:
-    - cron: "0 0-5 * * Sun"
+    - cron: "12 0-5 * * Sun"
 
 jobs:
   build:
@@ -37,7 +37,7 @@ jobs:
           cd $GITHUB_WORKSPACE
 
           git pull origin master
-          git add site/weeks/*
+          git add .
           git commit -m "Add historical week" || echo "No changes made"
           git push origin master
 
