@@ -35,7 +35,7 @@ async function run() {
   }
 
   let start = dateFns.startOfWeek(time)
-  let end = dateFns.endOfWeek(time)
+  let end = dateFns.addHours(dateFns.endOfWeek(time), 6)
 
   let startTime = dateFns.getUnixTime(start).toString()
   let endTime = dateFns.getUnixTime(end).toString()
