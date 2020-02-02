@@ -97,7 +97,7 @@ export function generateHeatmap(data) {
     .on("click", d => {
       if (d.streamers.length > 0) {
         sidebar.transition(250).style("opacity", 1)
-        let html = `<button id="sidebarCloseButton">X</button><h2>${d.streamers.length} streamers on ${d.day} @ ${d.hour}:00</h2><ul>`
+        let html = `<button id="sidebarCloseButton" class="rounded shadow" style="margin-left: -26px">X</button><h2>${d.streamers.length} streamers on ${d.day} @ ${d.hour}:00</h2><ul>`
         d.streamers.forEach(s => {
           html += `<li><img src="${
             logos.filter(l => l.name === s.streamer)[0].logo
