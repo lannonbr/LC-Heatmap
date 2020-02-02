@@ -88,6 +88,8 @@ function findData(dir) {
     state.week += dir
   }
 
+  document.body.className = ""
+
   if (state.week === currentWeek) {
     document.getElementById("nextWeek").setAttribute("disabled", true)
     document.getElementById("currWeek").setAttribute("disabled", true)
