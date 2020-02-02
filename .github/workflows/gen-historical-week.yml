@@ -2,7 +2,7 @@ name: Gen Historical Week
 
 on:
   schedule:
-    - cron: "0 0 * * Sun"
+    - cron: "0 0-5 * * Sun"
 
 jobs:
   build:
