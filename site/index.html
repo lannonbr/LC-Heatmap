@@ -27,12 +27,23 @@
       </p>
     </div>
 
-    <label for="username">
-      <input type="text" name="username" id="username" placeholder="username" />
-    </label>
-    <button id="heatmapSubmitButton" class="rounded shadow">
-      Generate Heatmap
-    </button>
+    <span
+      style="display: flex; margin-bottom: 20px;"
+      class="shadow rounded-right"
+    >
+      <label for="username" style="flex: 1;">
+        <input
+          type="text"
+          name="username"
+          id="username"
+          placeholder="username"
+          style="width: 100%;"
+        />
+      </label>
+      <button id="heatmapSubmitButton" class="rounded-right">
+        Generate Heatmap
+      </button>
+    </span>
 
     <div id="stats" class="card"></div>
 

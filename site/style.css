@@ -17,6 +17,11 @@ body.sidebarOpen {
   height: 450px;
 }
 
+#username {
+  padding: 8px 12px;
+  border: 0;
+}
+
 button {
   background: #102a43;
   color: #f0f4f8;
