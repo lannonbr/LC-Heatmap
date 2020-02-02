@@ -164,7 +164,7 @@ function filterHeatmap() {
   document.getElementById("my_dataviz").innerHTML = ""
   document.getElementsByClassName("tooltip")[0].remove()
 
-  let heatmapData = genHeatmapData(selectedStreams)
+  let heatmapData = genHeatmapData(selectedStreams, state.week)
 
   generateHeatmap(heatmapData)
   getMaxStreamPoint(heatmapData)
