@@ -30,7 +30,9 @@
     <label for="username">
       <input type="text" name="username" id="username" placeholder="username" />
     </label>
-    <button id="heatmapSubmitButton">Generate Heatmap</button>
+    <button id="heatmapSubmitButton" class="rounded shadow">
+      Generate Heatmap
+    </button>
 
     <div id="stats" class="card"></div>
 
@@ -38,10 +40,12 @@
       style="display: flex; justify-content: space-between; align-items: baseline;"
     >
       <h2 id="time_range">Timeframe:</h2>
-      <div>
-        <button id="prevWeek">Previous Week</button>
+      <div
+        style="display: flex; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3); border-radius: 20px;"
+      >
+        <button id="prevWeek" class="rounded-left">Previous Week</button>
         <button id="currWeek">Now</button>
-        <button id="nextWeek">Next Week</button>
+        <button id="nextWeek" class="rounded-right">Next Week</button>
       </div>
       <p id="max_stream_point">
         Max Streams at once:

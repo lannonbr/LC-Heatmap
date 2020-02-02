@@ -17,6 +17,42 @@ body.sidebarOpen {
   height: 450px;
 }
 
+button {
+  background: #102a43;
+  color: #f0f4f8;
+  border: 0;
+  padding: 8px 12px;
+  margin-left: 0;
+  margin-right: 0;
+}
+
+button:hover {
+  background: #334e68;
+}
+
+.rounded-right {
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
+}
+
+.rounded-left {
+  border-top-left-radius: 20px;
+  border-bottom-left-radius: 20px;
+}
+
+.rounded {
+  border-radius: 20px;
+}
+
+.shadow {
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+button:disabled {
+  background: #bcccdc;
+  color: #243b53;
+}
+
 #my_dataviz rect.present {
   cursor: pointer;
 }
