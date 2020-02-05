@@ -1,20 +1,15 @@
 import {
   parse,
   startOfWeek,
-  differenceInSeconds,
-  addHours,
   addWeeks,
-  subMinutes,
-  startOfHour,
+  subDays,
   getUnixTime,
   getHours,
   getDay,
-  isEqual,
   getWeek,
   endOfWeek,
   addDays,
 } from "date-fns"
-import { subDays } from "date-fns/esm"
 
 export default function(data, week) {
   let timeGrid = []
