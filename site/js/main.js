@@ -54,32 +54,9 @@ document
 
 document.getElementById("username").value = ""
 
-calcPrevWeek(state.week)
-
 document
   .getElementById("username")
   .addEventListener("keydown", e => e.key === "Enter" && filterHeatmap())
-
-function calcPrevWeek(week) {
-  if (week - 1 > 0) {
-    let identRaw = `20w${(week - 1).toString().padStart(2, "0")}-raw`
-    let identHeatmap = `20w${(week - 1).toString().padStart(2, "0")}-heatmap`
-
-    import(`./weeks/${identRaw.slice(0, -4)}.js`)
-      .then(dataset => {
-        let streams = Object.entries(dataset.default).reduce(takeSecond, [])
-
-        let heatmapData = genHeatmapData(streams, state.week - 1)
-
-        state[identRaw] = streams
-        state[identHeatmap] = heatmapData
-      })
-      .catch(err => {
-        console.log(err)
-        console.log("That week doesn't exist")
-      })
-  }
-}
 
 function findData(dir) {
   if (dir === 0) {
@@ -110,13 +87,6 @@ function findData(dir) {
     state.streams = state[identRaw]
     state.heatmap = state[identHeatmap]
     render()
-    if (
-      dir < 0 &&
-      state[`20w${(state.week - 1).toString().padStart(2, "0")}-raw`] ===
-        undefined
-    ) {
-      calcPrevWeek(state.week)
-    }
   } else {
     import(`./weeks/${identRaw.slice(0, -4)}.js`)
       .then(dataset => {
@@ -129,7 +99,6 @@ function findData(dir) {
         state[identRaw] = streams
         state[identHeatmap] = heatmapData
         render()
-        calcPrevWeek(state.week)
       })
       .catch(err => {
         console.log(err)
