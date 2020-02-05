@@ -1,7 +1,7 @@
 // Script to collect any streams over the last 7 days of time
 
 const fetch = require("node-fetch")
-const moment = require("moment")
+const dateFns = require("date-fns")
 
 const AWS = require("aws-sdk")
 AWS.config.update({ region: "us-east-1" })
@@ -25,13 +25,10 @@ async function run() {
 
   members = members.map(member => member.display_name)
 
-  let startTime = moment()
-    .subtract(1, "week")
-    .unix()
+  let startTime = dateFns
+    .getUnixTime(dateFns.subWeeks(new Date(), 1))
     .toString()
-  let endTime = moment()
-    .unix()
-    .toString()
+  let endTime = dateFns.getUnixTime(new Date()).toString()
 
   let allStreams = {}
 
@@ -105,14 +102,14 @@ function getStreams(queryResp) {
   }
 
   streams = streams.map(stream => {
-    let s = moment.unix(stream[0].timestamp).subtract(5, "minutes")
-    let e = moment.unix(stream[1].timestamp).add(5, "minutes")
+    let s = dateFns.subMinutes(dateFns.fromUnixTime(stream[0].timestamp), 5)
+    let e = dateFns.addMinutes(dateFns.fromUnixTime(stream[1].timestamp), 5)
 
     return {
       streamer: stream[0].username,
-      startTime: s.format("ddd, MMM D, YYYY h:mm A ZZ"),
-      endTime: e.format("ddd, MMM D, YYYY h:mm A ZZ"),
-      length: e.unix() - s.unix(),
+      startTime: dateFns.format(s, "EEE, LLL d, yyyy h:mm bbb xx"),
+      endTime: dateFns.format(e, "EEE, LLL d, yyyy h:mm bbb xx"),
+      length: dateFns.getUnixTime(e) - dateFns.getUnixTime(s),
     }
   })
 
