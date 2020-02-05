@@ -11,10 +11,13 @@ import {
   addDays,
 } from "date-fns"
 
-export default function(data, week) {
-  let timeGrid = []
-  let streamers = {}
+let timeGrid = []
+let streamers = {}
+let stream
 
+export default function(data, week) {
+  timeGrid = []
+  streamers = {}
   for (let i = 0; i < 7; i++) {
     timeGrid[i] = []
     timeGrid[i].length = 24
@@ -37,7 +40,7 @@ export default function(data, week) {
   // Start the current time at the start of the week
   let currTimePointer = startOfWeek(time)
 
-  for (let stream of data) {
+  for (stream of data) {
     const start = parse(stream.startTime, timeFmt, new Date())
     const end = parse(stream.endTime, timeFmt, new Date())
 
@@ -45,10 +48,7 @@ export default function(data, week) {
       // Case 1: Days are equal, get from start hour till end hour
       let day = getDay(start)
       let endHour = getHours(end)
-      for (let i = getHours(start); i <= endHour; i++) {
-        timeGrid[day][i]++
-        streamers[`${day}-${i}`].push(stream)
-      }
+      fillArrs(day, getHours(start), endHour)
     } else {
       if (getUnixTime(start) < getUnixTime(currTimePointer)) {
         // Case 2: Days aren't equal, start is on prev week, print only hours during this week
@@ -58,19 +58,13 @@ export default function(data, week) {
         // If the next day after startDay is not endDay, fill in all days inbetween
         if (getDay(addDays(start, 1)) !== endDay) {
           for (let d = 0; d < endDay; d++) {
-            for (let i = 0; i < 24; i++) {
-              timeGrid[d][i]++
-              streamers[`${d}-${i}`].push(stream)
-            }
+            fillArrs(d, 0, 23)
           }
         }
 
         let endHour = getHours(end)
 
-        for (let i = 0; i <= endHour; i++) {
-          timeGrid[endDay][i]++
-          streamers[`${endDay}-${i}`].push(stream)
-        }
+        fillArrs(endDay, 0, endHour)
       } else {
         if (getUnixTime(end) > getUnixTime(endOfWeek(currTimePointer))) {
           // Case 3: Days aren't equal, end is on next week, print only hours during this week
@@ -80,42 +74,28 @@ export default function(data, week) {
           // If the prev day before endDay is not startDay, fill in all days inbetween
           if (getDay(subDays(endDay, 1)) !== startDay) {
             for (let d = addDays(startDay, 1); d < 7; d++) {
-              for (let i = 0; i < 24; i++) {
-                timeGrid[d][i]++
-                streamers[`${d}-${i}`].push(stream)
-              }
+              fillArrs(d, 0, 23)
             }
           }
 
-          for (let i = getHours(start); i < 24; i++) {
-            timeGrid[startDay][i]++
-            streamers[`${startDay}-${i}`].push(stream)
-          }
+          fillArrs(startDay, getHours(start), 23)
         } else {
           // Case 4: Days aren't equal, print hours of start hour till end hour across days
           let startDay = getDay(start)
           let endDay = getDay(end)
 
-          for (let i = getHours(start); i < 24; i++) {
-            timeGrid[startDay][i]++
-            streamers[`${startDay}-${i}`].push(stream)
-          }
+          fillArrs(startDay, getHours(start), 23)
 
           // If the next day after startDay is not endDay, fill in all days inbetween
           if (getDay(addDays(start, 1)) !== endDay) {
             for (let d = addDays(startDay, 1); d < endDay; d++) {
-              for (let i = 0; i < 24; i++) {
-                timeGrid[d][i]++
-                streamers[`${d}-${i}`].push(stream)
-              }
+              fillArrs(d, 0, 23)
             }
           }
 
           let endHour = getHours(end)
-          for (let i = 0; i <= endHour; i++) {
-            timeGrid[endDay][i]++
-            streamers[`${endDay}-${i}`].push(stream)
-          }
+
+          fillArrs(endDay, 0, endHour)
         }
       }
     }
@@ -138,4 +118,11 @@ export default function(data, week) {
 
   // return the array of data
   return actualData
+}
+
+function fillArrs(day, hourStart, hourEnd) {
+  for (let i = hourStart; i <= hourEnd; i++) {
+    timeGrid[day][i]++
+    streamers[`${day}-${i}`].push(stream)
+  }
 }
