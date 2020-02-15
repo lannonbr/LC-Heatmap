@@ -5,8 +5,8 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "develop": "parcel site/index.html",
-    "build": "parcel build site/index.html --no-source-maps"
+    "develop": "parcel site/index.html site/history.html",
+    "build": "parcel build site/index.html site/history.html --no-source-maps"
   },
   "dependencies": {
     "aws-sdk": "^2.596.0",

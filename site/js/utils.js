@@ -16,7 +16,7 @@ export function calculateStats(streams) {
 
   let amtStreamers = [...new Set(streams.map(stream => stream.streamer))].length
 
-  document.getElementById("stats").innerHTML = `
+  document.getElementsByClassName("stats")[0].innerHTML = `
     <h2 style="text-align: center">Statistics</h2>
     <ul class="flex">
       <li>${amtStreamers}<p>Streamers live this week</p></li>
