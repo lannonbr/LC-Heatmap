@@ -1,5 +1,6 @@
 import logos from "./data/logos.json"
 import { formatStreamTime } from "./utils"
+import format from "date-fns/format"
 
 let sidebar
 
@@ -8,6 +9,8 @@ export function generateHeatmap(data) {
   var margin = { top: 20, right: 30, bottom: 20, left: 30 },
     width = 1280 - margin.left - margin.right,
     height = 450 - margin.top - margin.bottom
+
+  let timezone = format(new Date(), "z")
 
   // append the svg object to the body of the page
   var svg = d3
@@ -97,7 +100,11 @@ export function generateHeatmap(data) {
     .on("click", d => {
       if (d.streamers.length > 0) {
         sidebar.transition(250).style("opacity", 1)
-        let html = `<button id="sidebarCloseButton" class="rounded shadow" style="margin-left: -26px">X</button><h2>${d.streamers.length} streamers on ${d.day} @ ${d.hour}:00</h2><ul>`
+        let html = `
+          <button id="sidebarCloseButton" class="rounded shadow">X</button>
+          <h2>${d.streamers.length} streamers</h2>
+          <h3>${d.day} @ ${d.hour}:00 ${timezone}</h3>
+          <ul>`
         d.streamers.forEach(s => {
           html += `<li><img src="${
             logos.filter(l => l.name === s.streamer)[0].logo

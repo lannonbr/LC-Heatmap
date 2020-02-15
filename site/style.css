@@ -97,6 +97,22 @@ button:disabled {
   width: 350px;
 }
 
+.tooltip h2 {
+  margin-top: 0px;
+  font-size: 2.2em;
+  margin-bottom: 0px;
+}
+
+.tooltip h3 {
+  margin-top: 10px;
+  font-size: 1.5em;
+}
+
+.tooltip h2,
+.tooltip h3 {
+  margin-left: 30px;
+}
+
 .tooltip ul {
   padding-left: 0;
   display: grid;
@@ -115,4 +131,10 @@ button:disabled {
   height: 30px;
   margin-inline-end: 10px;
   border-radius: 30px;
+}
+
+#sidebarCloseButton {
+  position: absolute;
+  top: 10px;
+  left: -15px;
 }
