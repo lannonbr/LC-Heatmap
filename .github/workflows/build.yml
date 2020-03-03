@@ -43,4 +43,6 @@ jobs:
 
           yarn build
           cp -r site/weeks/ dist
+          cp _headers dist
+          cp site/js/data/data.json dist
           npx netlify-cli deploy --dir=dist --prod
