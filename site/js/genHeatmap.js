@@ -61,7 +61,7 @@ export function generateHeatmap(data) {
     .attr("transform", "translate(0," + height + ")")
     .call(d3.axisBottom(x))
 
-  // Build X scales and axis:
+  // Build Y scales and axis:
   var y = d3
     .scaleBand()
     .range([height, 0])
@@ -87,16 +87,6 @@ export function generateHeatmap(data) {
     .data(data, d => d.hour + ":" + d.day)
     .enter()
     .append("g")
-
-  // Add background
-  tiles
-    .append("rect")
-    .attr("x", d => x(d.hour))
-    .attr("y", d => y(d.day))
-    .attr("class", d => (d.streamers.length > 0 ? "present" : ""))
-    .attr("width", x.bandwidth())
-    .attr("height", y.bandwidth())
-    .style("fill", d => myColor(d.value))
     .on("click", d => {
       if (d.streamers.length > 0) {
         sidebar.transition(250).style("opacity", 1)
@@ -119,12 +109,23 @@ export function generateHeatmap(data) {
       }
     })
 
+  // Add background
+  tiles
+    .append("rect")
+    .attr("x", d => x(d.hour))
+    .attr("y", d => y(d.day))
+    .attr("class", d => (d.streamers.length > 0 ? "present" : ""))
+    .attr("width", x.bandwidth())
+    .attr("height", y.bandwidth())
+    .style("fill", d => myColor(d.value))
+
   // Add number on tile if streamers > 0
   tiles
     .append("text")
     .text(d => d.streamers.length)
-    .attr("x", d => x(d.hour) + 22)
-    .attr("y", d => y(d.day) + 34)
+    .attr("x", d => x(d.hour) + (x.bandwidth()/2))
+    .attr("y", d => y(d.day) + (y.bandwidth()/2) + 6)
+    .style("text-anchor", "middle")
     .style("opacity", d => (d.streamers.length > 0 ? 1 : 0))
 }
 
