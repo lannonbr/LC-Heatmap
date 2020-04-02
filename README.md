@@ -21,8 +21,8 @@ To get started with tinkering with the site locally, clone the repo down, instal
 
 ```sh
 git clone https://github.com/lannonbr/LC-Heatmap.git
-npm install
-npm run develop
+yarn
+yarn run develop
 ```
 
 This will run `parcel` as a HMR server so whenever you make changes to the various files, the bundle will rebuild and refresh the page live.
