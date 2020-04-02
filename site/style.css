@@ -85,7 +85,8 @@ button:disabled {
   color: #243b53;
 }
 
-#my_dataviz rect.present {
+#my_dataviz rect.present,
+#my_dataviz text {
   cursor: pointer;
 }
 
