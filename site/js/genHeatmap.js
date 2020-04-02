@@ -80,6 +80,7 @@ export function generateHeatmap(data) {
     .append("div")
     .attr("class", "card tooltip")
     .style("opacity", 0)
+    .style("display", "none")
 
   //Read the data
   let tiles = svg
@@ -99,7 +100,10 @@ export function generateHeatmap(data) {
     .style("fill", d => myColor(d.value))
     .on("click", d => {
       if (d.streamers.length > 0) {
-        sidebar.transition(250).style("opacity", 1)
+        sidebar
+          .transition(250)
+            .style("opacity", 1)
+            .style("display", "block")
         let html = `
           <button id="sidebarCloseButton" class="rounded shadow">X</button>
           <h2>${d.streamers.length} streamers</h2>
@@ -129,6 +133,12 @@ export function generateHeatmap(data) {
 }
 
 function closeSidebar() {
-  sidebar.transition(250).style("opacity", 0)
+  sidebar
+    .transition(250)
+      .style("opacity", 0)
+    .transition()
+      .delay(250)
+      .style("display", "none")
+
   document.body.className = ""
 }
