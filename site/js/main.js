@@ -52,10 +52,10 @@ document
   .getElementById("heatmapSubmitButton")
   .addEventListener("click", filterHeatmap)
 
-document.getElementById("username").value = ""
+document.getElementById("user_filter").value = ""
 
 document
-  .getElementById("username")
+  .getElementById("user_filter")
   .addEventListener("keydown", e => e.key === "Enter" && filterHeatmap())
 
 function findData(dir) {
@@ -121,7 +121,7 @@ function render() {
 }
 
 function filterHeatmap() {
-  let streamers = document.getElementById("username").value
+  let streamers = document.getElementById("user_filter").value
 
   let streamersArr = streamers.split(",").map(s => s.toLowerCase())
 
