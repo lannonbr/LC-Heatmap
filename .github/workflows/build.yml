@@ -20,6 +20,7 @@ jobs:
       - name: Poll for new data
         env:
           CLIENT_ID: ${{ secrets.CLIENT_ID }}
+          CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
           TEAM_NAME: ${{ secrets.TEAM_NAME }}
         run: |
           yarn

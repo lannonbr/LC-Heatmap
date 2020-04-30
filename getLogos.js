@@ -5,6 +5,7 @@ const fetch = require("node-fetch")
 require("dotenv").config()
 
 const twitchClientID = process.env.CLIENT_ID
+const twitchClientSecret = process.env.CLIENT_SECRET
 const team = process.env.TEAM_NAME
 
 async function run() {
@@ -13,12 +14,13 @@ async function run() {
     headers: {
       Accept: "application/vnd.twitchtv.v5+json",
       "Client-ID": twitchClientID,
+      Authorization: `OAuth ${twitchClientSecret}`,
     },
   })
   let data = await resp.json()
   let members = data.users
 
-  members = members.map(member => ({
+  members = members.map((member) => ({
     name: member.display_name,
     logo: member.logo,
   }))

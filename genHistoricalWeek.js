@@ -11,6 +11,7 @@ const ddb = new AWS.DynamoDB({ apiVersion: "2012-08-10" })
 require("dotenv").config()
 
 const twitchClientID = process.env.CLIENT_ID
+const twitchClientSecret = process.env.CLIENT_SECRET
 const team = process.env.TEAM_NAME
 
 const week = dateFns.getWeek(new Date()) - 1
@@ -21,12 +22,13 @@ async function run() {
     headers: {
       Accept: "application/vnd.twitchtv.v5+json",
       "Client-ID": twitchClientID,
+      Authorization: `OAuth ${twitchClientSecret}`,
     },
   })
   let data = await resp.json()
   let members = data.users
 
-  members = members.map(member => member.display_name)
+  members = members.map((member) => member.display_name)
 
   let time = dateFns.parse(`2020-01-01`, "yyyy-MM-dd", new Date())
 
@@ -81,7 +83,7 @@ function getStreams(queryResp) {
     return []
   }
 
-  let datapoints = queryResp.Items.map(entry => ({
+  let datapoints = queryResp.Items.map((entry) => ({
     username: entry.username.S,
     timestamp: +entry.timestamp.N,
   }))
@@ -116,7 +118,7 @@ function getStreams(queryResp) {
     }
   }
 
-  streams = streams.map(stream => {
+  streams = streams.map((stream) => {
     let s = dateFns.subMinutes(dateFns.fromUnixTime(stream[0].timestamp), 5)
     let e = dateFns.addMinutes(dateFns.fromUnixTime(stream[1].timestamp), 5)
 
