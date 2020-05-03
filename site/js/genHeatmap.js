@@ -51,29 +51,21 @@ export function generateHeatmap(data) {
   ]
 
   // Build X scales and axis:
-  var x = d3
-    .scaleBand()
-    .range([0, width])
-    .domain(hours)
-    .padding(0.01)
+  var x = d3.scaleBand().range([0, width]).domain(hours).padding(0.01)
   svg
     .append("g")
     .attr("transform", "translate(0," + height + ")")
     .call(d3.axisBottom(x))
 
   // Build Y scales and axis:
-  var y = d3
-    .scaleBand()
-    .range([height, 0])
-    .domain(days)
-    .padding(0.01)
+  var y = d3.scaleBand().range([height, 0]).domain(days).padding(0.01)
   svg.append("g").call(d3.axisLeft(y))
 
   // Build color scale
   var myColor = d3
     .scaleLinear()
     .range(["white", "#69b3a2"])
-    .domain([0, Math.max(...data.map(d => d.value))])
+    .domain([0, Math.max(...data.map((d) => d.value))])
 
   sidebar = d3
     .select("body")
@@ -85,24 +77,25 @@ export function generateHeatmap(data) {
   //Read the data
   let tiles = svg
     .selectAll()
-    .data(data, d => d.hour + ":" + d.day)
+    .data(data, (d) => d.hour + ":" + d.day)
     .enter()
     .append("g")
-    .on("click", d => {
+    .on("click", (d) => {
       if (d.streamers.length > 0) {
-        sidebar
-          .transition(250)
-            .style("opacity", 1)
-            .style("display", "block")
+        sidebar.transition(250).style("opacity", 1).style("display", "block")
         let html = `
           <button id="sidebarCloseButton" class="rounded shadow">X</button>
           <h2>${d.streamers.length} streamers</h2>
           <h3>${d.day} @ ${d.hour}:00 ${timezone}</h3>
           <ul>`
-        d.streamers.forEach(s => {
-          html += `<li><img src="${
-            logos.filter(l => l.name === s.streamer)[0].logo
-          }"/>${s.streamer}<br/>${formatStreamTime(s)}</li>`
+        d.streamers.forEach((s) => {
+          let possibleLogo = logos.filter((l) => l.name === s.streamer)
+
+          let logoSrc = possibleLogo.length > 0 ? possibleLogo[0].logo : logos.filter(l => l.name === "livecoders")[0].logo
+
+          html += `<li><img src="${logoSrc}"/>${
+            s.streamer
+          }<br/>${formatStreamTime(s)}</li>`
         })
         html += "</ul>"
         sidebar.html(html)
@@ -116,30 +109,30 @@ export function generateHeatmap(data) {
   // Add background
   tiles
     .append("rect")
-    .attr("x", d => x(d.hour))
-    .attr("y", d => y(d.day))
-    .attr("class", d => (d.streamers.length > 0 ? "present" : ""))
+    .attr("x", (d) => x(d.hour))
+    .attr("y", (d) => y(d.day))
+    .attr("class", (d) => (d.streamers.length > 0 ? "present" : ""))
     .attr("width", x.bandwidth())
     .attr("height", y.bandwidth())
-    .style("fill", d => myColor(d.value))
+    .style("fill", (d) => myColor(d.value))
 
   // Add number on tile if streamers > 0
   tiles
     .append("text")
-    .text(d => d.streamers.length)
-    .attr("x", d => x(d.hour) + (x.bandwidth()/2))
-    .attr("y", d => y(d.day) + (y.bandwidth()/2) + 6)
+    .text((d) => d.streamers.length)
+    .attr("x", (d) => x(d.hour) + x.bandwidth() / 2)
+    .attr("y", (d) => y(d.day) + y.bandwidth() / 2 + 6)
     .style("text-anchor", "middle")
-    .style("opacity", d => (d.streamers.length > 0 ? 1 : 0))
+    .style("opacity", (d) => (d.streamers.length > 0 ? 1 : 0))
 }
 
 function closeSidebar() {
   sidebar
     .transition(250)
-      .style("opacity", 0)
+    .style("opacity", 0)
     .transition()
-      .delay(250)
-      .style("display", "none")
+    .delay(250)
+    .style("display", "none")
 
   document.body.className = ""
 }
