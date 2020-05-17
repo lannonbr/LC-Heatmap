@@ -701,6 +701,14 @@
   resolved "https://registry.yarnpkg.com/@iarna/toml/-/toml-2.2.3.tgz#f060bf6eaafae4d56a7dac618980838b0696e2ab"
   integrity sha512-FmuxfCuolpLl0AnQ2NHSzoUKWEJDFl63qXjzdoWBVyFCXzMGm1spBzk7LeHNoVCiWCF7mRVms9e6jEV9+MoPbg==
 
+"@jlengstorf/get-twitch-oauth@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@jlengstorf/get-twitch-oauth/-/get-twitch-oauth-1.0.0.tgz#71266b49a23003bc78e08e8e398f4695e9395577"
+  integrity sha512-6hcZZQZBjuB4bvWoITYCPZ9mbRMkqxFnycyMRAshMkqs1qia8vMzGnEtL4c7VNWCnwQR3KQTO1kFHkYsuB6WHw==
+  dependencies:
+    dotenv "^8.2.0"
+    node-fetch "^2.6.0"
+
 "@mrmlnc/readdir-enhanced@^2.2.1":
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/@mrmlnc/readdir-enhanced/-/readdir-enhanced-2.2.1.tgz#524af240d1a360527b730475ecfa1344aa540dde"
