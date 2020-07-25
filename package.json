@@ -9,9 +9,9 @@
     "build": "parcel build site/index.html site/history.html --no-source-maps"
   },
   "dependencies": {
-    "@jlengstorf/get-twitch-oauth": "^1.0.0",
-    "aws-sdk": "^2.596.0",
-    "date-fns": "^2.9.0",
+    "@jlengstorf/get-twitch-oauth": "^1.0.1",
+    "aws-sdk": "^2.720.0",
+    "date-fns": "^2.15.0",
     "dotenv": "^8.2.0",
     "node-fetch": "^2.6.0"
   },
