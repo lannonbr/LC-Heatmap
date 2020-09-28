@@ -23,4 +23,4 @@ jobs:
           cp -r site/weeks/ dist
           cp site/_headers dist
           cp site/js/data/data.json dist
-          npx netlify-cli deploy --dir=dist --prod
+          netlify deploy --dir=dist --prod
